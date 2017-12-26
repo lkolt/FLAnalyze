@@ -1,11 +1,7 @@
 import parsers
 import numpy
-from string import *
 from collections import *
-
-
-def check_term(c):
-    return c in ascii_lowercase + digits
+from utils import *
 
 
 def grammar_closure(grammar, matrix):
@@ -21,18 +17,18 @@ def grammar_closure(grammar, matrix):
     nterm_grammar = {k: v for k, v in temp_n.items()}
     term_grammar = {k: v for k, v in temp_t.items()}
 
-    n = matrix.shape[0]
-    mtx = numpy.empty((n, n), dtype=list)
-    for i in range(n):
-        for j in range(n):
+    size = matrix.shape[0]
+    mtx = numpy.empty((size, size), dtype=list)
+    for i in range(size):
+        for j in range(size):
             mtx[i, j] = term_grammar[matrix[i, j]].copy() if matrix[i, j] in term_grammar.keys() else []
 
     work = True
     while work:
         work = False
-        for i in range(n):
-            for j in range(n):
-                for k in range(n):
+        for i in range(size):
+            for j in range(size):
+                for k in range(size):
                     fst = mtx[i, k]
                     snd = mtx[k, j]
 
@@ -48,22 +44,20 @@ def grammar_closure(grammar, matrix):
                                 mtx[i, j] += res
                                 work = True
     ans = []
-    for i in range(n):
-        for j in range(n):
+    for i in range(size):
+        for j in range(size):
             for nonterm in mtx[i, j]:
                 ans.append((i, nonterm, j))
     return ans
 
 
 def run(grammar_filename, graph_filename):
-    res = grammar_closure(parsers.read_grammar(grammar_filename), parsers.read_graph(graph_filename))
-    res_str = ''
-    for i, nterm, j in res:
-        res_str += str(i) + ',' + nterm + ',' + str(j) + '\n'
+    result = grammar_closure(parsers.read_grammar(grammar_filename), parsers.read_graph(graph_filename))
+    res_str = res_to_str(result)
 
-    print(len([nterm for _, nterm, _ in res if 'S' == nterm]))
+    print(count_control_number(result))
 
-    return res
+    return res_str
 
 
 grammar_in = 'data/grammars/Q1_H.gr'
