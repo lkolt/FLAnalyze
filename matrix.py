@@ -4,6 +4,8 @@ from utils import *
 
 
 def grammar_closure(grammar, matrix):
+    print('Reading input: Done')
+
     temp_n = defaultdict(str)
     temp_t = defaultdict(list)
     for key, value in grammar.items():
@@ -22,8 +24,15 @@ def grammar_closure(grammar, matrix):
         for j in range(size):
             mtx[i, j] = term_grammar[matrix[i, j]].copy() if matrix[i, j] in term_grammar.keys() else []
 
+    print('Pre-accounting: Done')
+
+    iteration = 0
     work = True
     while work:
+
+        iteration += 1
+        print('Starting Floyd...')
+
         work = False
         for i in range(size):
             for j in range(size):
@@ -42,6 +51,12 @@ def grammar_closure(grammar, matrix):
                             if res not in mtx[i, j]:
                                 mtx[i, j] += res
                                 work = True
+
+            # printing
+            if i % 50 == 0:
+                print('>Done: ' + str(100 * i / size) + '%')
+
+    print('Collecting results...')
     ans = []
     for i in range(size):
         for j in range(size):
@@ -51,15 +66,5 @@ def grammar_closure(grammar, matrix):
 
 
 def run(grammar_filename, graph_filename):
-    result = grammar_closure(parsers.read_grammar(grammar_filename), parsers.read_graph(graph_filename))
-    res_str = res_to_str(result)
-
-    print(count_control_number(result))
-
-    return res_str
-
-
-grammar_in = 'data/grammars/Q3_H.gr'
-graph_in = 'data/graphs/foaf.dot'
-
-res = run(grammar_in, graph_in)
+    print('Starting matrix algorithm on grammar ' + grammar_filename + ' and graph ' + graph_filename + '...')
+    return grammar_closure(parsers.read_grammar(grammar_filename), parsers.read_graph(graph_filename))
