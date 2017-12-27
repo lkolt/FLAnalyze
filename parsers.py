@@ -1,5 +1,5 @@
 import numpy
-from collections import *
+from utils import *
 
 
 def read_graph(filename):
@@ -37,3 +37,39 @@ def read_grammar(filename):
                 res[left].extend(right)
 
         return {k: v for k, v in res.items()}
+
+
+def read_grammar_automaton(filename):
+    grammar = GrammarAutomaton()
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+        size = lines[2].count(";")
+        grammar.matrix = numpy.empty((size, size), dtype=list)
+        grammar.matrix.fill(list())
+
+        for line in lines[3:]:
+            line = line.replace(' ', '')
+            if line.count('label='):
+                take = False
+                split = line.split('[')
+                state = split[0]
+                label = ''
+                for s in split[1].split('"'):
+                    if take:
+                        label = s
+                        break
+                    take = 'label=' in s
+                if line.count('color="green"'):
+                    grammar.starts[label].append(int(state))
+                if line.count('shape="doublecircle"'):
+                    grammar.finals[label].append(int(state))
+                if line.count('->'):
+                    split_s = state.split('->')
+                    i = split_s[0]
+                    j = split_s[1]
+                    if label not in grammar.matrix:
+                        grammar.matrix[int(i)][int(j)] = []
+                    grammar.matrix[int(i)][int(j)] += [label]
+                    if not label.isupper():
+                        grammar.terminals.add(label)
+    return grammar

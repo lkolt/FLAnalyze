@@ -40,8 +40,10 @@ def bottom_up(grammar, matrix):
         for j in range(size):
             mtx[i][j] = set(matrix[i][j])
 
-    dict_t = dict_n = {}
-    len_t = len_l = 0
+    dict_t = {}
+    dict_n = {}
+    len_t = 0
+    len_l = 0
     for nterm, lines in grammar.items():
         for prod in lines:
             if check_term(prod):

@@ -1,6 +1,5 @@
 import parsers
 import numpy
-from collections import *
 from utils import *
 
 
@@ -60,7 +59,7 @@ def run(grammar_filename, graph_filename):
     return res_str
 
 
-grammar_in = 'data/grammars/Q1_H.gr'
-graph_in = 'data/graphs/skos.dot'
+grammar_in = 'data/grammars/Q3_H.gr'
+graph_in = 'data/graphs/foaf.dot'
 
 res = run(grammar_in, graph_in)
