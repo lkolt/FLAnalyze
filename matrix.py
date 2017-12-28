@@ -29,7 +29,7 @@ def grammar_closure(grammar, matrix):
     iteration = 0
     work = True
     while work:
-
+        print('Current iteration = ' + str(iteration))
         iteration += 1
         print('Starting Floyd...')
 
