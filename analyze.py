@@ -36,7 +36,8 @@ def run(algo_type, grammar_filename, graph_filename, result_filename=''):
     elif algo_type == 2:
         res = top_down.run(grammar_filename, graph_filename)
 
-    print(count_control_number(res))
+    print("Printing...")
+
     res_str = res_to_str(res)
     if result_filename == '':
         print(res_str)
@@ -44,7 +45,7 @@ def run(algo_type, grammar_filename, graph_filename, result_filename=''):
         with open(result_filename, 'w') as file:
             file.writelines(res_str)
 
-    print('Done')
+    print('Printing: Done')
 
 
 size = len(sys.argv)
