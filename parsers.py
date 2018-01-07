@@ -2,9 +2,19 @@ import numpy
 from utils import *
 
 
+def check_digraph(line):
+    if line.lower().count('digraph'):
+        return True
+    return False
+
+
 def read_graph(filename):
     with open(filename) as f:
         lines = f.readlines()
+
+        if not check_digraph(lines[0]):
+            print('Not digraph in input')
+
         size = lines[2].count(';')
 
         matrix = numpy.empty((size, size), dtype=list)
@@ -46,6 +56,10 @@ def read_grammar_automaton(filename):
     grammar = GrammarAutomaton()
     with open(filename, 'r') as f:
         lines = f.readlines()
+
+        if not check_digraph(lines[0]):
+            print('Not digraph in input')
+
         size = lines[2].count(";")
 
         grammar.matrix = numpy.empty((size, size), dtype=list)
