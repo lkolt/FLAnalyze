@@ -22,7 +22,10 @@ def grammar_closure(grammar, matrix):
     mtx = numpy.empty((size, size), dtype=list)
     for i in range(size):
         for j in range(size):
-            mtx[i, j] = term_grammar[matrix[i, j]].copy() if matrix[i, j] in term_grammar.keys() else []
+            mtx[i, j] = []
+            for label in matrix[i, j]:
+                if label in term_grammar.keys():
+                    mtx[i, j] = term_grammar[label].copy()
 
     print('Pre-accounting: Done')
 
