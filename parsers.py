@@ -7,7 +7,10 @@ def read_graph(filename):
         lines = f.readlines()
         size = lines[2].count(';')
 
-        matrix = numpy.zeros((size, size), dtype=numpy.str)
+        matrix = numpy.empty((size, size), dtype=list)
+        for i in range(size):
+            for j in range(size):
+                matrix[i][j] = []
 
         for line in lines[3:-1]:
             if len(line) > 1:
@@ -19,7 +22,7 @@ def read_graph(filename):
                 j = int(split_br[0])
                 label = split_quot[1]
 
-                matrix[i, j] = label
+                matrix[i, j].append(label)
 
         return matrix
 
@@ -44,8 +47,11 @@ def read_grammar_automaton(filename):
     with open(filename, 'r') as f:
         lines = f.readlines()
         size = lines[2].count(";")
+
         grammar.matrix = numpy.empty((size, size), dtype=list)
-        grammar.matrix.fill(list())
+        for i in range(size):
+            for j in range(size):
+                grammar.matrix[i][j] = []
 
         for line in lines[3:]:
             line = line.replace(' ', '')

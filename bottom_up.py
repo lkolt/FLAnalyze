@@ -1,96 +1,89 @@
 import numpy
 import parsers
+from queue import *
 from utils import *
 
 
-def dfs(size, matrix, start, cur, s, dct, depth):
-    for l, r in dct.items():
-        if s == l:
-            matrix[start, cur].update(r)
-
-    if depth == 0:
-        return
-
-    for i in range(size):
-        if matrix[cur, i] != set():
-            symbols = matrix[cur, i].copy()
-            for symbol in symbols:
-                dfs(size, matrix, start, i, s + symbol, dct, depth - 1)
-
-
-def get_res_set(size, res_mat):
-    res_set = set()
-    for i in range(size):
-        for j in range(size):
-            for t in res_mat[i, j]:
-                res_set.add((i, t, j))
-    return res_set
-
-
-def run_dfs(size, res_mat, dct, length):
-    for i in range(size):
-        dfs(size, res_mat, i, i, '', dct, length)
-
-        # printing
-        if i % 50 == 0:
-            print('>Done: ' + str(100 * i / size) + '%')
-
-
-def bottom_up(grammar, matrix):
+def bottom_up(grammar, graph):
     print('Reading input: Done')
-    size = matrix.shape[0]
+    print('Pre-accounting...')
 
-    mtx = numpy.empty((size, size), dtype=set)
-    for i in range(size):
-        for j in range(size):
-            mtx[i][j] = set(matrix[i][j])
+    graph_size = graph.shape[0]
+    grammar_size = grammar.matrix.shape[0]
 
-    dict_t = {}
-    dict_n = {}
-    len_t = 0
-    len_l = 0
-    for nterm, lines in grammar.items():
-        for prod in lines:
-            if check_term(prod):
-                if prod not in dict_t:
-                    dict_t[prod] = set()
-                dict_t[prod].add(nterm)
-                len_t = max(len(prod), len_t)
-            else:
-                if prod not in dict_n:
-                    dict_n[prod] = set()
-                dict_n[prod].add(nterm)
-                len_l = max(len(prod), len_l)
+    check = numpy.empty((grammar_size, graph_size, grammar_size, graph_size), dtype=list)
+    for i in range(grammar_size):
+        for j in range(graph_size):
+            for k in range(grammar_size):
+                for l in range(graph_size):
+                    check[i][j][k][l] = []
+
+    edges = defaultdict(list)
+    for i in range(grammar_size):
+        for j in range(grammar_size):
+            for label in grammar.matrix[i][j]:
+                edges[label].append((i, j))
+
+    for graph_from in range(graph_size):
+        for graph_to in range(graph_size):
+            for label in graph[graph_from][graph_to]:
+                for grammar_from, grammar_to in edges[label]:
+                    if label not in check[grammar_from][graph_from][grammar_to][graph_to]:
+                        check[grammar_from][graph_from][grammar_to][graph_to].append(label)
 
     print('Pre-accounting: Done')
-    print('Starting dfs for terminals...')
-
-    run_dfs(size, mtx, dict_t, len_t)
-    result = get_res_set(size, mtx)
-
-    print('Dfs for terminals: Done')
 
     iteration = 0
     while True:
         print('Current iteration = ' + str(iteration))
         iteration += 1
-        print('Starting one more dfs for nonterminals...')
 
-        run_dfs(size, mtx, dict_n, len_l)
-        update = get_res_set(size, mtx)
-        if result == update:
+        queue_iter = 0
+        new_edges = []
+        for nterm in grammar.starts:
+            for grammar_from in grammar.starts[nterm]:
+                for graph_from in range(graph_size):
+                    used = numpy.zeros((grammar_size, graph_size), dtype=bool)
+
+                    queue = Queue()
+                    queue.put((grammar_from, graph_from))
+                    used[grammar_from][graph_from] = True
+                    while queue.qsize() > 0:
+                        grammar_to, graph_to = queue.get()
+
+                        if nterm not in graph[graph_from][graph_to] and grammar_to in grammar.finals[nterm]:
+                            graph[graph_from][graph_to].append(nterm)
+                            new_edges.append((graph_from, graph_to, nterm))
+
+                        for i in range(grammar_size):
+                            for j in range(graph_size):
+                                if not used[i][j] and check[grammar_to][graph_to][i][j]:
+                                    queue.put((i, j))
+                                    used[i][j] = True
+
+                        queue_iter += 1
+                        if queue_iter % 1500 == 0:
+                            print('Current queue iteration: ' + str(queue_iter) + ' and in queue ' + str(queue.qsize())
+                                  + ' elements more')
+
+        if len(new_edges) == 0:
             break
-        result = update.copy()
-        print('One more iteration...')
+
+        for graph_from, graph_to, label in new_edges:
+            for grammar_from, grammar_to in edges[label]:
+                if label not in check[grammar_from][graph_from][grammar_to][graph_to]:
+                    check[grammar_from][graph_from][grammar_to][graph_to].append(label)
 
     print('Collecting results...')
     ans = []
-    for l, S, r in result:
-        if not check_term(S):
-            ans.append((l, S, r))
+    for i in range(graph_size):
+        for j in range(graph_size):
+            for label in graph[i][j]:
+                if not check_term(label):
+                    ans.append((i, label, j))
     return ans
 
 
 def run(grammar_filename, graph_filename):
     print('Starting bottom_up algorithm on grammar ' + grammar_filename + ' and graph ' + graph_filename + '...')
-    return bottom_up(parsers.read_grammar(grammar_filename), parsers.read_graph(graph_filename))
+    return bottom_up(parsers.read_grammar_automaton(grammar_filename), parsers.read_graph(graph_filename))

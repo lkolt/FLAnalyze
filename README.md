@@ -6,7 +6,7 @@
 ## Input
 All graphs in input must be in Graphviz/DOT format
 * Matrix algorithm need grammar in Chomsky normal form (**for example:** data/grammars/Q1_H.dot)
-* Bottom_up algorithm need normal grammar (**for example:** data/grammars/Q1_N.dot)
+* Bottom_up algorithm need grammar in Graphviz/DOT format (**for example:** data/grammars/Q1_A.dot)
 * Top_down algorithm need grammar in Graphviz/DOT format (**for example:** data/grammars/Q1_A.dot)
 
 ## Run

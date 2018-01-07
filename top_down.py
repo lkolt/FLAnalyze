@@ -4,7 +4,7 @@ from utils import *
 
 def top_down(grammar, graph):
     print('Reading input: Done')
-    queue = set()
+    queue = set()                    # FIXME: queue
     was = set()
     size = graph.shape[0]
     for left in range(size):

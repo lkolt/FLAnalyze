@@ -14,7 +14,7 @@ data_grammars = 'data/grammars/'
 grammars_names = ['Q1', 'Q2']
 quick_tests_grammars = ['Q5']
 extension_matrix_grammars = '_H.dot'
-extension_bottom_up_grammars = '_N.dot'
+extension_bottom_up_grammars = '_A.dot'
 extension_top_down_grammars = '_A.dot'
 
 answers = [[810, 2164, 2499, 2540, 15454, 15156, 4118, 9472, 17634, 66572, 56195],
