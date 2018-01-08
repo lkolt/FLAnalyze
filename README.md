@@ -37,3 +37,6 @@ For run tests for every algorithm separately:
 `python -m unittest -v tests.Hard.test_matrix`<br>
 `python -m unittest -v tests.Hard.test_bottom_up`<br>
 `python -m unittest -v tests.Hard.test_top_down`
+
+## Note
+Algorithms do not work with grammars containing epsilon. Please remove all epsilon-production before use the algorithms.
