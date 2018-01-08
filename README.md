@@ -26,7 +26,7 @@ For run all tests:
 <br>
 `python -m unittest -v tests`
 <br>
-All tests are passed for ~3.8 hours (bottom_up is very slow)
+All tests are passed for ~1.5 hours
 
 For run only quick tests with small data:
 <br>

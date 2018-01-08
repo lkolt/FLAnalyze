@@ -87,11 +87,11 @@ def read_grammar_automaton(filename):
                     split_s = state.split('->')
                     i = split_s[0]
                     j = split_s[1]
-                    if label not in grammar.matrix:
-                        grammar.matrix[int(i)][int(j)] = []
+
                     grammar.matrix[int(i)][int(j)] += [label]
                     if not label.isupper():
                         grammar.terminals.add(label)
     if len(grammar.starts) == 0:
         print("Incorrect type of grammar automaton!")
+
     return grammar

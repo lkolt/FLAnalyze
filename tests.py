@@ -7,12 +7,12 @@ from utils import *
 data_graphs = 'data/graphs/'
 graphs_names = ['skos', 'generations', 'travel', 'univ-bench', 'atom-primitive', 'biomedical-mesure-primitive',
                 'foaf', 'people_pets', 'funding', 'wine', 'pizza']
-quick_tests_graphs = ['g1']
+quick_tests_graphs = ['g1', 'g2']
 extension_graphs = '.dot'
 
 data_grammars = 'data/grammars/'
 grammars_names = ['Q1', 'Q2']
-quick_tests_grammars = ['Q5']
+quick_tests_grammars = ['Q5', 'Q6']
 extension_matrix_grammars = '_H.dot'
 extension_bottom_up_grammars = '_A.dot'
 extension_top_down_grammars = '_A.dot'
@@ -24,10 +24,11 @@ answers = [[810, 2164, 2499, 2540, 15454, 15156, 4118, 9472, 17634, 66572, 56195
 def check_ans(grammar, graph, ans):
     with open('data/answers/' + grammar + graph + '.txt') as file:
         lines = file.readlines()
-        if len(ans) != len(lines):
+        if ans.count('\n') != len(lines):
             return False
-        for line in ans:
-            if line not in lines:
+
+        for line in lines:
+            if line.replace('\n', '') not in ans.split('\n'):
                 return False
         return True
 
@@ -71,7 +72,8 @@ class Quick(unittest.TestCase):
                 grammar_name = data_grammars + grammar + extension_matrix_grammars
                 graph_name = data_graphs + graph + extension_graphs
                 res = matrix.run(grammar_name, graph_name)
-                self.assertFalse(check_ans(grammar, graph, res_to_str(res)))
+                self.assertTrue(check_ans(grammar, graph, res_to_str(res)))
+                print(grammar_name + ' and ' + graph_name + ' OK')
 
     def test_bottom_up_quick(self):
         for i, grammar in enumerate(quick_tests_grammars):
@@ -79,7 +81,8 @@ class Quick(unittest.TestCase):
                 grammar_name = data_grammars + grammar + extension_bottom_up_grammars
                 graph_name = data_graphs + graph + extension_graphs
                 res = bottom_up.run(grammar_name, graph_name)
-                self.assertFalse(check_ans(grammar, graph, res_to_str(res)))
+                self.assertTrue(check_ans(grammar, graph, res_to_str(res)))
+                print(grammar_name + ' and ' + graph_name + ' OK')
 
     def test_top_down_quick(self):
         for i, grammar in enumerate(quick_tests_grammars):
@@ -87,4 +90,5 @@ class Quick(unittest.TestCase):
                 grammar_name = data_grammars + grammar + extension_top_down_grammars
                 graph_name = data_graphs + graph + extension_graphs
                 res = top_down.run(grammar_name, graph_name)
-                self.assertFalse(check_ans(grammar, graph, res_to_str(res)))
+                self.assertTrue(check_ans(grammar, graph, res_to_str(res)))
+                print(grammar_name + ' and ' + graph_name + ' OK')

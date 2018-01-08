@@ -44,7 +44,7 @@ def top_down(grammar, graph):
         for i in range(len(grammar.matrix[right])):
             for j in range(len(graph[left])):
                 for term in grammar.matrix[right][i]:
-                    if term not in grammar.terminals:
+                    if term not in grammar.terminals:                       # FIXME: check_term
                         new_node = (term, left)
                         gss[new_node][node].add(i)
                         for nterm in grammar.starts[term]:
