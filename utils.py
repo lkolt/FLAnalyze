@@ -4,7 +4,6 @@ from collections import *
 
 class GrammarAutomaton:
     def __init__(self):
-        self.terminals = set()
         self.matrix = None
         self.starts = defaultdict(list)
         self.finals = defaultdict(list)

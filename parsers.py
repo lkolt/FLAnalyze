@@ -89,8 +89,7 @@ def read_grammar_automaton(filename):
                     j = split_s[1]
 
                     grammar.matrix[int(i)][int(j)] += [label]
-                    if not label.isupper():
-                        grammar.terminals.add(label)
+
     if len(grammar.starts) == 0:
         print("Incorrect type of grammar automaton!")
 

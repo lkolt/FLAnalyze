@@ -30,21 +30,23 @@ def top_down(grammar, graph):
 
         cur = queue.get()
         left, node, right = cur
-        if [right] in grammar.finals.values():
-            for i in gss[node]:
-                for j in gss[node][i]:
-                    nd = (left, i, j)
-                    if nd not in was:
-                        queue.put(nd)
-                        was.add(nd)
 
-            result.add((node, left))
-            used[node].append(left)
+        for finals in grammar.finals.values():
+            if right in finals:
+                for i in gss[node]:
+                    for j in gss[node][i]:
+                        nd = (left, i, j)
+                        if nd not in was:
+                            queue.put(nd)
+                            was.add(nd)
+
+                result.add((node, left))
+                used[node].append(left)
 
         for i in range(len(grammar.matrix[right])):
             for j in range(len(graph[left])):
                 for term in grammar.matrix[right][i]:
-                    if term not in grammar.terminals:                       # FIXME: check_term
+                    if not check_term(term):
                         new_node = (term, left)
                         gss[new_node][node].add(i)
                         for nterm in grammar.starts[term]:
