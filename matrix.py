@@ -19,13 +19,14 @@ def grammar_closure(grammar, matrix):
     term_grammar = {k: v for k, v in temp_t.items()}
 
     size = matrix.shape[0]
-    mtx = numpy.empty((size, size), dtype=list)
+    mtx = numpy.empty((size, size), dtype=set)
     for i in range(size):
         for j in range(size):
-            mtx[i, j] = []
+            mtx[i, j] = set()
             for label in matrix[i, j]:
                 if label in term_grammar.keys():
-                    mtx[i, j] = term_grammar[label].copy()
+                    for lbl in term_grammar[label]:
+                        mtx[i, j].add(lbl)
 
     print('Pre-accounting: Done')
 
@@ -37,23 +38,25 @@ def grammar_closure(grammar, matrix):
         print('Starting Floyd...')
 
         work = False
-        for i in range(size):
-            for j in range(size):
-                for k in range(size):
+        for k in range(size):
+            for i in range(size):
+                for j in range(size):
+
                     fst = mtx[i, k]
                     snd = mtx[k, j]
 
-                    pr = []
+                    pr = set()
                     for q in fst:
                         for w in snd:
-                            pr += [q + w]
+                            pr.add(q + w)
 
                     for nterm_pair in pr:
                         if nterm_pair in nterm_grammar:
                             res = nterm_grammar[nterm_pair]
-                            if res not in mtx[i, j]:
-                                mtx[i, j] += res
-                                work = True
+                            for lbl in res:
+                                if lbl not in mtx[i, j]:
+                                    mtx[i, j].add(lbl)
+                                    work = True
 
             # printing
             if i % 50 == 0:

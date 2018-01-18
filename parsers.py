@@ -9,7 +9,7 @@ def check_digraph(line):
 
 
 def read_graph(filename):
-    with open(filename) as f:
+    with open(filename, encoding="utf-8-sig") as f:
         lines = f.readlines()
 
         if not check_digraph(lines[0]):
@@ -38,7 +38,7 @@ def read_graph(filename):
 
 
 def read_grammar(filename):
-    with open(filename) as f:
+    with open(filename, encoding="utf-8-sig") as f:
         lines = f.readlines()
         res = defaultdict(list)
 
@@ -54,7 +54,7 @@ def read_grammar(filename):
 
 def read_grammar_automaton(filename):
     grammar = GrammarAutomaton()
-    with open(filename, 'r') as f:
+    with open(filename, 'r', encoding="utf-8-sig") as f:
         lines = f.readlines()
 
         if not check_digraph(lines[0]):

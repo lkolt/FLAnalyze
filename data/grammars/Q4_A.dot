@@ -1,0 +1,27 @@
+digraph g
+{
+0;1;2;3;4;5;6;7;8;9;10;11;
+rankdir = LR
+0[label="S", color="green"]
+4[label="A", color="green"]
+6[label="B", color="green"]
+9[label="C", color="green"]
+2[label="S", shape="doublecircle"]
+5[label="A", shape="doublecircle"]
+8[label="B", shape="doublecircle"]
+11[label="C", shape="doublecircle"]
+
+0 -> 1[label = "S"]
+1 -> 2[label = "0"]
+0 -> 2[label = "0"]
+0 -> 2[label = "1"]
+1 -> 2[label = "1"]
+0 -> 3[label = "A"]
+3 -> 2[label = "B"]
+3 -> 2[label = "C"]
+4 -> 5[label = "2"]
+6 -> 7[label = "S"]
+7 -> 8[label = "3"]
+9 -> 10[label = "3"]
+10 -> 11[label = "S"]
+}
