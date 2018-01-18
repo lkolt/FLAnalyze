@@ -7,19 +7,19 @@ from utils import *
 data_graphs = 'data/graphs/'
 graphs_names = ['skos', 'generations', 'travel', 'univ-bench', 'atom-primitive', 'biomedical-mesure-primitive',
                 'foaf', 'people_pets', 'funding', 'wine', 'pizza']
-quick_tests_graphs = ['g0', 'g1', 'g2', 'g3', 'g4', 'g6']
+quick_tests_graphs = ['g0', 'g1', 'g2', 'g3', 'g4', 'g5', 'g6', 'g7', 'g8', 'g9']
 extension_graphs = '.dot'
 
 data_grammars = 'data/grammars/'
 grammars_names = ['Q1', 'Q2']
-quick_tests_grammars = ['Q4', 'Q5', 'Q6', 'Q8', 'Q7', 'Q10']
+quick_tests_grammars = ['Q4', 'Q5', 'Q6', 'Q8', 'Q7', 'Q9', 'Q10', 'Q11', 'Q12', 'Q12']
 extension_matrix_grammars = '_H.dot'
 extension_bottom_up_grammars = '_A.dot'
 extension_top_down_grammars = '_A.dot'
 
 answers = [[810, 2164, 2499, 2540, 15454, 15156, 4118, 9472, 17634, 66572, 56195],
            [1, 0, 63, 81, 122, 2871, 10, 37, 1158, 133, 1262]]
-answers_quick = [6, 3, 0, 1, 1, 16]
+answers_quick = [6, 3, 0, 1, 1, 12, 16, 1, 20, 2652]
 
 
 class Hard(unittest.TestCase):

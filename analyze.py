@@ -29,6 +29,7 @@ def run(algo_type, grammar_filename, graph_filename, result_filename=''):
               '-u for bottom_up algorithm\n'
               '-d for top_down algorithm\n')
         print_error()
+        sys.exit(1)
     elif algo_type == 0:
         res = matrix.run(grammar_filename, graph_filename)
     elif algo_type == 1:
